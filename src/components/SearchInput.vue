@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'SearchInput',
   filters: {
     highlight(words, query) {
       const reg = new RegExp(query, 'gi');
