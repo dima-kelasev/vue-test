@@ -6,7 +6,7 @@
       <li
         v-for="todo in filterList"
         :key="todo"
-        v-html="$options.filters.highligh(todo, debouncedInput)"
+        v-html="$options.filters.highlight(todo, debouncedInput)"
       ></li>
     </ul>
   </div>
@@ -16,7 +16,7 @@
 export default {
   name: 'SearchInput',
   filters: {
-    highligh(words, query) {
+    highlight(words, query) {
       const reg = new RegExp(query, 'gi');
       return words.replace(reg, function(str) {
         return '<strong>' + str + '</strong>';
