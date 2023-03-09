@@ -6,7 +6,13 @@
       <li
         v-for="todo in filterList"
         :key="todo"
-        v-html="$options.filters.highlight(todo, debouncedInput)"
+        v-html="
+          $options.filters.highlight(
+            todo.title,
+            todo.description,
+            debouncedInput
+          )
+        "
       ></li>
     </ul>
   </div>
@@ -16,11 +22,18 @@
 export default {
   name: 'SearchInput',
   filters: {
-    highlight(words, query) {
+    highlight(word1, word2, query) {
       const reg = new RegExp(query, 'gi');
-      return words.replace(reg, function(str) {
-        return '<strong>' + str + '</strong>';
+      const strong1 = word1.replace(reg, function(str) {
+        const a = `<strong style='color: #40b883'>${str}</strong>`;
+        return a;
       });
+      const strong2 = word2.replace(reg, function(str) {
+        const p = `<strong style='color: #40b883'>${str}</strong>`;
+        return p;
+      });
+      const dropDownList = `<div><p style='margin: 0'>${strong1}</p><p style='margin: 0;font-size: 12px;'>${strong2}</p></div>`;
+      return dropDownList;
     },
   },
   data() {
@@ -30,9 +43,15 @@ export default {
       searchInputValue: '',
       timeout: null,
       todos: [
-        'Animal is a big organism',
-        'Monkey is an animal too',
-        'Animal Animal',
+        {
+          title: 'Animal is a big organism',
+          description: 'animals living everywhere',
+        },
+        {
+          title: 'Monkey is an animal too',
+          description: 'they have many types',
+        },
+        { title: ' hello hello', description: 'Animal Animal' },
       ],
     };
   },
@@ -50,7 +69,14 @@ export default {
     },
     filterList() {
       return this.todos.filter((item) => {
-        return item.toLowerCase().includes(this.debouncedInput.toLowerCase());
+        return (
+          item.title
+            .toLowerCase()
+            .includes(this.debouncedInput.toLowerCase()) ||
+          item.description
+            .toLowerCase()
+            .includes(this.debouncedInput.toLowerCase())
+        );
       });
     },
   },
@@ -58,6 +84,16 @@ export default {
 </script>
 
 <style scoped>
+.searchList {
+  display: flex;
+  flex-direction: column;
+}
+p {
+  margin: 0;
+}
+.description {
+  font-size: 12px;
+}
 .answer-list {
   background: #000;
   width: 420px;
@@ -89,10 +125,6 @@ export default {
   box-shadow: 4px 4px 30px 13px rgba(26, 127, 204, 0.2);
 }
 
-h1,
-h2 {
-  font-weight: normal;
-}
 ul {
   list-style-type: none;
   padding: 0;
@@ -100,8 +132,7 @@ ul {
 li {
   display: inline-block;
   margin: 0 10px;
-}
-a {
-  color: #42b983;
+  border-bottom: 1px solid gray;
+  cursor: pointer;
 }
 </style>
