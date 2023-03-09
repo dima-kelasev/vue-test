@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      msg: 'Welcome to Test Search Input',
       debouncedInput: '',
       searchInputValue: '',
       timeout: null,
