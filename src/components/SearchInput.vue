@@ -4,8 +4,8 @@
     <input v-model="input" placeholder="Search project" class="search-input" />
     <ul v-if="input.length > 2" class="answer-list">
       <li
-        v-for="todo in filterList"
-        :key="todo"
+        v-for="(todo, idx) in filterList"
+        :key="idx"
         v-html="
           $options.filters.highlight(
             todo.title,
@@ -43,15 +43,15 @@ export default {
       searchInputValue: '',
       timeout: null,
       todos: [
+        { title: ' hello hello', description: 'Animal Animal too' },
         {
-          title: 'Animal is a big organism',
-          description: 'animals living everywhere',
-        },
-        {
-          title: 'Monkey is an animal too',
+          title: 'Monkey is an animal too have',
           description: 'they have many types',
         },
-        { title: ' hello hello', description: 'Animal Animal' },
+        {
+          title: 'Animal is a big organism',
+          description: 'animals have lived everywhere',
+        },
       ],
     };
   },
@@ -68,7 +68,7 @@ export default {
       },
     },
     filterList() {
-      return this.todos.filter((item) => {
+      const filteredArray = this.todos.filter((item) => {
         return (
           item.title
             .toLowerCase()
@@ -78,6 +78,13 @@ export default {
             .includes(this.debouncedInput.toLowerCase())
         );
       });
+      const index = filteredArray.findIndex((el) =>
+        el.title.toLowerCase().includes(this.debouncedInput.toLowerCase())
+      );
+
+      filteredArray.unshift(...filteredArray.splice(index, 1));
+
+      return filteredArray;
     },
   },
 };
